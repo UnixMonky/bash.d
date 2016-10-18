@@ -1,0 +1,3 @@
+function gvim {
+	echo ":e scp://$(whoami)@$(uname -n)/$(dirname $1)/$(basename $1)"
+}

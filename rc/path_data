@@ -1,0 +1,441 @@
+# # # # # # # # # # # # # # # # #
+# path data for generating PATH #
+# # # # # # # # # # # # # # # # #
+
+# v2.13 2008.7.14 Added ALLZONES alias
+
+ZCODE:/usr/local/share/zcode
+ZCODE:/usr/local/share/zcode/infocom
+ZCODE:${HOME}/zcode
+
+OPT_MAN_PATHS:/opt/VRTS/man
+OPT_MAN_PATHS:/opt/VRTSvlic/man
+OPT_MAN_PATHS:/opt/SUNwconn/man
+OPT_MAN_PATHS:/opt/SUNconn/atm/man 
+OPT_MAN_PATHS:/opt/SUNWexplo/man
+OPT_MAN_PATHS:/opt/samba/man
+OPT_MAN_PATHS:/opt/csw/man
+OPT_MAN_PATHS:/usr/sfw/man
+OPT_MAN_PATHS:/opt/sfw/man
+OPT_MAN_PATHS:/opt/openwin/man
+OPT_MAN_PATHS:/usr/cluster/man
+OPT_MAN_PATHS:/opt/SUNWSMS/man
+OPT_MAN_PATHS:/opt/SUNWcstu/man
+OPT_MAN_PATHS:/opt/CollabNet_Subversion/share/man
+OPT_MAN_PATHS:/opt/SUNWscat/man
+OPT_MAN_PATHS:/opt/SUNWvxvm/man
+OPT_MAN_PATHS:/opt/VRTSllt/man
+OPT_MAN_PATHS:/opt/VRTSgab/man
+
+AOPS_PATH:/lc/bin
+else
+	AOPS_PATH=""
+fi
+if [[ -d /usr/local/bin ]]; then
+	LOCAL_PATH="/usr/local/bin"
+else
+	LOCAL_PATH=""
+fi
+if [[ -d /usr/local/sbin ]]; then
+	LOCALS_PATH="/usr/local/sbin"
+else
+	LOCALS_PATH=""
+fi
+if [[ -d /usr/local/sa/bin ]]; then
+	LOCALSA_PATH="/usr/local/sa/bin"
+else
+	LOCALSA_PATH=""
+fi
+
+# Open Source and Freeware directories
+if [[ -d /usr/sfw ]]; then
+	SFW_PATH_U=/usr/sfw/bin
+else
+	SFW_PATH_U=""
+fi
+if [[ -d /opt/sfw ]]; then
+	SFW_PATH_O=/opt/sfw/bin
+else
+	SFW_PATH_O=""
+fi
+if [[ -d /opt/csw ]]; then
+	CSW_PATH=/opt/csw/bin
+else
+	CSW_PATH=""
+fi
+
+# Solaris Crash Analysis Tool
+if [[ -d /opt/SUNWscat ]]; then
+	SCAT_PATH=/opt/SUNWscat/bin
+else
+	SCAT_PATH=""
+fi
+
+# Sun Cluster
+if [[ -d /usr/cluster/bin ]]; then
+	CLUSTER=/usr/cluster/bin
+else
+	CLUSTER=""
+fi
+if [[ -d /opt/SUNWcluster/bin ]]; then
+	CLUSTER2=/opt/SUNWcluster/bin
+else
+	CLUSTER2=""
+fi
+
+# System Administration
+if [[ -d /usr/platform/$ARCH ]]; then
+	PLATFORM=/usr/platform/$ARCH/sbin
+else
+	PLATFORM=""
+fi
+if [[ -s /opt/sun/bin ]]; then
+	SUN_BIN=/opt/sun/bin
+else
+	SUN_BIN=""
+fi
+if [[ -d /opt/sun/hbatools ]]; then
+	HBA_TOOLS=/opt/sun/hbatools
+else
+	HBA_TOOLS=""  
+fi
+
+
+# SAMBA
+if [[ -d /opt/samba ]]; then
+	SAMBA="/opt/samba/bin /opt/samba/sbin"
+else
+	SAMBA="" 
+fi
+
+# Sun System Controller
+if [[ -d /opt/SUNWSMS ]]; then
+	SYS_CTRL=/opt/SUNWSMS/bin
+else
+	SYS_CTRL=""
+fi
+
+#  EMC PowerPath
+if [[ -d /etc/emc/bin ]]; then
+	POWERPATH=/etc/emc/bin
+else
+	POWERPATH=""
+fi
+
+#  Veritas Volume Manager
+if [[ -d /etc/vx/bin ]];  then
+	VX_PATH=/etc/vx/bin
+else
+	VX_PATH=""
+fi
+if [[ -d /opt/vxva/bin ]]; then
+	VXVA_PATH=/opt/vxva/bin
+else
+	VXVA_PATH=""
+fi
+if [ -d /opt/SUNWvxva/bin ]; then
+	SVXVA_PATH=/opt/SUNWvxva/bin
+else
+	SVXVA_PATH=""
+fi
+if [ -d /opt/VRTSvcs/bin ]; then
+	VXCS_PATH=/opt/VRTSvcs/bin
+else
+	VXCS_PATH=""
+fi
+
+# NetBackup
+if [[ -d /usr/openv/netbackup ]]; then
+	NETBACK_PATH="/usr/openv/netbackup/bin /usr/openv/volmgr/bin"
+else
+	NETBACK_PATH=""
+fi
+
+# Scripts
+if [[ -d ${HOME}/scripts ]];  then
+	SCRIPT_PATH=${HOME}/scripts
+else
+	SCRIPT_PATH=""
+fi
+
+# Local binaries
+OS=$(/bin/uname -s)
+if [[ -d ${HOME}/bin ]] && [[ ! -L ${HOME}/bin ]]; then
+	echo "ERR: ${HOME}/bin is real dir, not symlink!"
+elif [[ -L ${HOME}/bin ]]; then
+	LS_OUT=$(ls -l ${HOME}/bin)
+	TARGET=${LS_OUT#*-> }
+	if [[ ${TARGET} != "${HOME}/lbin/${OS}" ]]; then
+		rm ${HOME}/bin
+		ln -s ${HOME}/lbin/${OS} ${HOME}/bin
+	fi
+else
+	ln -s ${HOME}/lbin/${OS} ${HOME}/bin
+fi
+
+if [[ -L ${HOME}/bin ]];  then
+	LBIN=${HOME}/bin
+else
+	LBIN=""
+fi
+
+	
+
+## Subversion
+if [[ -d /opt/CollabNet_Subversion ]]; then
+	SVN_PATH=/opt/CollabNet_Subversion/bin
+else
+	SVN_PATH=""
+fi
+
+# MySQL
+if [[ -d /opt/mysql/bin ]]; then
+	MYSQL_PATH=/opt/mysql/bin
+else
+	MYSQL_PATH=""
+fi
+
+# Cust_Admin Toolkit  (Obsolete)
+#if [[ -d /cust/admin/scripts ]]; then
+#	CUST_ADMIN_PATH="/cust/admin/scripts"
+#else
+#	CUST_ADMIN_PATH=""
+#fi
+
+# LoudCloud (AOPS)
+#if [[ -d /lc/bin ]]; then
+#	LC_PATH=/lc/bin
+#else
+#	LC_PATH=""
+#fi
+
+# Obsoleted by /cust/admin/scripts
+#if [[ -d /opt/EDSsan ]]; then
+#	SAN_PATH=/opt/EDSsan
+#else
+#	SAN_PATH=""
+#fi
+
+# EDS PatchTool
+#if [[ -d /opt/EDSptool ]]; then
+#	PATCH_PATH=/opt/EDSptool/bin
+#else
+#	PATCH_PATH=""
+#fi
+
+# ISM6 commands
+if [[ -d /cust/IBM/ITM/sol283/is/bin ]]; then
+	ISM6_PATH=/cust/IBM/ITM/sol283/is/bin
+else
+	ISM6_PATH=""
+fi
+
+# EMSCLI for command-line interface to Remedy
+if [[ -d /usr/local/scripts/arscli ]]; then
+	EMSCLI_PATH=/usr/local/scripts/arscli
+else
+	EMSCLI_PATH=""
+fi
+
+# Cygwin Paths
+CYG_PATH=$(echo -n $(echo $PATH | sed 's/:/\n/g' | grep cygdrive))
+
+# Opsware Global File system
+if [[ -d /opt/opsware/vmm-ctl/bin ]]; then
+	OPSW_PATH="/opsw/bin /opt/opsware/vmm-ctl/bin /opt/opsware/ogfsutils/bin"
+else
+	OPSW_PATH=""
+fi
+
+
+OS_PATH="/bin /usr/bin /usr/sbin /sbin /usr/ucb /usr/ccs/bin"
+USRLOCAL_PATH="$AOPS_PATH $LOCAL_PATH $LOCALS_PATH $LOCALSA_PATH $LBIN $OPSW_PATH"
+SYSADMIN_PATH="$PLATFORM $SYS_CTRL $SCAT_PATH $SUN_BIN $HBA_TOOLS $POWERPATH"
+CLUSTER_PATH="$CLUSTER $CLUSTER2"
+SCRIPT_PATH="$SCRIPT_PATH $SVN_PATH"
+VERITAS_PATH="$VX_PATH $VXVA_PATH $SVXVA_PATH $VXCS_PATH"
+SFW_PATH="$CSW_PATH $SFW_PATH_U $SFW_PATH_O"
+APPS_PATH="$ISM6_PATH $MYSQL_PATH $SAMBA $NETBACK_PATH $EMSCLI_PATH"
+
+# now simply build the path out of the parts
+FULL_PATH="$OS_PATH $SYSADMIN_PATH $USRLOCAL_PATH $SCRIPT_PATH $CLUST_PATH $VERITAS_PATH $SFW_PATH $APPS_PATH $CYG_PATH"
+for PATH_ELEMENT in $FULL_PATH; do
+	TMP_PATH=${TMP_PATH}${TMP_PATH:+":"}${PATH_ELEMENT}
+done
+PATH=$(echo $TMP_PATH | sed 's/::/:/g')
+export PATH
+hash > /dev/null
+
+# Configure Shell Functions
+case $SHELL in
+	*/ksh)  export FPATH=${FPATH:+"$FPATH:"}$HOME/rc/sh_functions ;;
+	*/bash) for FUNC in $HOME/rc/sh_functions/*; do
+		[[ -f $FUNC ]] && . $FUNC
+		done ;;
+esac
+
+	# emulate ksh functions in bash
+	[[ $SHELL == "/bin/bash" ]] && . $HOME/rc/kshenv
+
+## homesync now extracts automatically, don't need spool dir anymore
+# set spool dir
+#SPOOL_DIR=${HOME}/spool
+
+# find vim, if it's there, let's use it
+HAVE_VIM=`whence vim`
+
+if [[ -n $HAVE_VIM ]]; then
+	alias vi=$HAVE_VIM 
+fi
+
+# Always use vi as our editor
+set -o vi
+
+# determine if we are starting up an interactive session
+if [[ $(tty) != "not a tty" ]]; then
+	# this is an interactive shell
+
+	if [[ ! -d ${HOME}/.history ]]; then
+		mkdir ${HOME}/.history
+	fi
+	export HISTFILE=${HOME}/.history/hist_$$
+	export HISTSIZE=512
+
+	set ignoreeof
+	set noclobber
+	set markdirs
+	set nobeep
+	set visiblebell
+	unset autologout
+	
+	# Set the term if in gnome
+	TERM=${COLORTERM=$TERM}
+
+	# Define the prompt
+	case $SHELL in
+		*/bash)
+			# need to wrap color codes in \[ \] to prevent funky line wrap stuff
+			PS1="\[\e[1;37m\][\t $(date +%Z)]\[\e[0;35m\]\u\[\e[0m\]@\[\e[0;32m\]\h\[\e[0m\]:\w > "
+			#PS1="$(color bold,gray,black)[\t $(date +%Z)]$(color normal,purple,black)\u$(color)@$(color normal,green,black)\h$(color):${CURDIR} > "
+			;;
+		*/ksh)
+	. $HOME/rc/sh_functions/cd2 # this will define CURDIR
+	CURDIR=$PWD
+			typeset -RZ2 _x1 _x2 _x3
+			let SECONDS=$(date '+3600*%H+60*%M+%S')
+			_s='(_x1=(SECONDS/3600)%24)==(_x2=(SECONDS/60)%60)==(_x3=SECONDS%60)'
+			TIME='"${_d[_s]}$_x1:$_x2:$_x3"'
+			#PS1="[$TIME]$(logname)@${HOST}:\${CURDIR} > "
+			PS1="$(color bold,gray,black)[$TIME]$(color normal,purple,black)$(logname)$(color)@$(color normal,green,black)${HOST}$(color):\${CURDIR} > "
+			#PS1="$(color bold,gray,black)[$TIME]$(color normal,purple,black)$(logname)$(color)@$(color normal,green,black)${HOST}$(color):\${PWD} > "
+			;;
+	esac
+export PS1
+
+	# set some aliases
+	if [[ -f $HOME/rc/sh_functions/cd2 ]]; then
+		[[ $SHELL == "/bin/ksh" ]] && alias cd=cd2
+	fi
+
+	if [[ -f $CSW_PATH/python ]]; then
+		alias py=$CSW_PATH/python
+	fi
+
+	if [[ -f /usr/local/bin/vim ]]; then
+		alias vi=/usr/local/bin/vim
+	fi
+
+	# ls with filetype marks, and color if available
+	if [[ -f $HOME/lbin/$ARCH/gls ]]; then
+		alias ls="$HOME/lbin/$ARCH/gls -F --color=auto"
+	else
+		alias ls="ls -F"
+	fi
+
+	# less is better than more
+	if [[ -f /usr/bin/less ]]; then
+		alias more=/usr/bin/less
+	fi
+
+	# Start a dtterm
+	alias dt="/usr/dt/bin/dtterm -bg black -fg yellow -geo 132x36 -xrm *menuBar:false -sl 5000 -display $DISPLAY &"
+
+	# the "wide" ps
+	alias wps="/usr/ucb/ps -awwx"
+
+	# Alternative ssh to use function instead of alias
+	alias ssh="ssh_alt"
+
+	# m0332ussac1 (rhel 5.5) has a weird which alias I don't want
+	alias which >/dev/null 2>&1
+	[[ $? == 0 ]] && unalias which
+
+	# 2009.03.30 - /etc/emc/bin is where these are in new versions of powerpath, added to path
+	# EMC Powerpath is in /etc, so instead of including /etc in the path, 
+	# we create aliases for the known binaries
+	#alias emcpmgr="/etc/emcpmgr"
+	#alias emcpreg="/etc/emcpreg"
+	#alias emcpsf_unload="/etc/emcpsf_unload"
+	#alias emcpupgrade="/etc/emcpupgrade"
+	#alias powercf="/etc/powercf"
+	#alias powermt="/etc/powermt"
+	#alias powervxvm="/etc/powervxvm"
+
+	### don't need this with the new homesync
+	# create a fresh tar of the .ssh directory each time we login to
+	# the "master" server
+	# if [[ $HOST != 'nocfs12' ]]; then
+		# if we aren't on the "master" server then process any
+		# *.tar.gz files that exist in the spool directory
+	# 	FILE_LIST=`ls ${SPOOL_DIR}`
+
+	# 	if [[ -n $FILE_LIST ]];  then
+
+	# 		echo '' 
+
+	# 		for FILENAME in $FILE_LIST; do
+	# 			if [[ $FILENAME != 'CVS' ]] ; then
+	# 				TAR_GZ=$FILENAME
+	# 				gunzip -c ${SPOOL_DIR}/${TAR_GZ} | tar -xf - 2> /dev/null
+	# 				rm -f ${SPOOL_DIR}/$TAR_GZ
+	# 				echo "NOTE: processed ${SPOOL_DIR}/$TAR_GZ"
+	# 				DESPOOL=1
+	# 			fi
+	# 		done
+	# 	fi
+	# fi
+
+	# get rid of any of the local.* that might have been copied during
+	# account creation
+	rm -f local.* .kshrc 2> /dev/null
+
+	# create the .forward so any email for me is sent to the right place
+	# echo "matt.huber@hp.com" > .forward
+
+	# insure that the .ssh directory is protected
+	chmod 700 .ssh 2> /dev/null
+
+	# hash again to insure any new scripts/binaries are found
+	hash > /dev/null
+
+	# Set Window Title
+	titlebar
+
+	# Verify that .profile is a link
+	if [[ ! -L ${HOME}/.profile ]]; then
+		[[ -f ${HOME}/.profile ]] && rm ${HOME}/.profile
+		ln -s rc/profile ${HOME}/.profile
+		DESPOOL=1
+	fi
+
+	# Reload .profile if updated
+	#if [[ $DESPOOL = 1 ]]; then
+	#	DESPOOL=0
+	#	. ${HOME}/.profile
+	#else  # no reload, so set term size
+	#	/usr/X/bin/resize > /dev/null
+	#fi
+		
+	echo ''
+fi
+

@@ -1,0 +1,10 @@
+#
+# 2008.07.24 - copied from console, revamped to ssh as root to host in ~/data/hosts
+
+function sshr {
+	SERVER=$(print $1 | cut -d. -f1)
+   	grep $SERVER ~/data/hosts | grep -v "#" | cut -f1-2| read IP HOSTNAME
+	titlebar $HOSTNAME
+	ssh root@$IP
+	titlebar
+}

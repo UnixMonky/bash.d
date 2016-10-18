@@ -1,0 +1,39 @@
+function buildhost {
+# $Id: buildhost 22 2009-03-25 21:21:04Z sz3007 $
+
+if [[ -n $1 ]]; then
+	TYPE=$1
+else
+	TYPE="build"
+fi
+
+PTS=$(print $SSH_TTY | cut -d/ -f4)
+[[ -z $PTS ]] && exit
+
+SESSION=$(w -hs $(/usr/ucb/whoami) | grep -n " $PTS " | cut -d: -f1)
+TRUE_SESSION=$SESSION
+NUM_ACTIVE=$(grep -c $TYPE ~/data/hosts)
+if (( $NUM_ACTIVE == 0 )); then
+    print "No '$TYPE' servers found."
+#    return 1
+fi
+while [[ $SESSION -gt $NUM_ACTIVE ]]; do
+	SESSION=$(($SESSION - $NUM_ACTIVE))
+done
+
+if [[ $(uname -n) == "usplgmad003" || $(uname -n) == "usplgmad004" ]]; then
+	BHOST=$(grep $TYPE ~/data/hosts | tail -$SESSION | head -1 | cut -f2)
+else
+	NUMZONES=$(/usr/sbin/zoneadm list | grep -c -v global)
+	if [[ $NUMZONES -ne 0 ]]; then
+		while [[ $SESSION -gt $NUMZONES ]]; do
+			SESSION=$(($SESSION - $NUMZONES))
+		done
+		BZONE=$(zoneadm list -ci | grep -v global | tail -$SESSION | head -1 | cut -f2)
+	fi
+fi
+
+[[ -n $BHOST ]] && print "[$TRUE_SESSION/$SESSION] BHOST = $BHOST"
+[[ -n $BZONE ]] && print "[$TRUE_SESSION/$SESSION] BZONE = $BZONE"
+
+}

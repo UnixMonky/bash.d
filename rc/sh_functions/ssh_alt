@@ -1,0 +1,10 @@
+function ssh_alt {
+
+#   print '/usr/local/bin/ssh $*'
+   $(which ssh) $*
+
+#   print 'Resetting tilebar...'
+   titlebar
+}
+
+

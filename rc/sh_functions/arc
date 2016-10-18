@@ -1,0 +1,13 @@
+function arc {
+
+DATE=$(date +%Y%m%d)
+TIME=$(date +%H%M%S)
+FILE=$1
+
+if [[ -n ${FILE} ]] ; then
+        if [[ -d archive ]] ; then
+                cp -p ${FILE} archive/${FILE}_${DATE}_${TIME}
+                echo "${FILE} saved to archive/${FILE}_${DATE}_${TIME}."
+        fi
+fi
+}

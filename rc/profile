@@ -1,0 +1,500 @@
+# # # # # # # # # # # # # #
+# .profile for Matt Huber #
+# # # # # # # # # # # # # #
+
+# v2.13 2008.7.14 Added ALLZONES alias
+# v26 2010.09.22  Updated for bash shell
+# v27 2010.09.22  added emscli path
+# v28 2010.09.22  fixed stty,uname paths
+# v29 2010.12.17  added 'unalias which'
+# v30 2011.01.12  updated titlebar function to include linux hardware.
+# v31 2012.08.28  Added 'arc' function
+# v32 2012.09.10  Added LBIN login to set ${HOME}/bin based on OS
+# v33 2013.02.26  addeed check to not process directories in sh_functions
+# v34 2013.02.26  Added CPU/Memory to titlebar
+# v35 2013.03.29  Cygwin modifications
+# v36 2013.04.01  Added paths for Opsware Global File System
+# v37 2013.04.01  Fixed paths for Opsware Global File System
+# v38 2013.04.01  Added VISUAL=vi export
+# v39 2013.04.01  Added check for newer home in nocfs and to autopull if needed
+#                 removed symlink requirement for ~/bin
+# v40 2013.10.02  added 'remedy' alias
+# v41 2014.10.02  No change to profile, but added ssh keys to homesync tarball
+# v42 2015-03-11  No change to profile, update titlebar sh_function
+# v43 2015-03-11  No change to profile, update ssh keys
+# v44 2015-11-06  Added cygwin hooks
+# v45 2016-03-22  Added fuck alias
+# v46 2016-06-10  Updated SSH keys for new laptop
+# v47 2016-06-29  Updated wget logic; checked for function exist in kshenv
+# v48 2016-09-08  update .forward email address; remove 'fuck' alias
+
+MY_VER=48
+
+echo "[[ profile/rc v${MY_VER} ]]"
+
+## check for newer version of rc package
+if [[ $(hostname | cut -d. -f1) != "nocfs1"* ]]; then 
+  WGET=`which wget`
+  if [[ -z $WGET ]]; then
+    [[ -f /usr/sfw/bin/wget ]] && WGET=/usr/sfw/bin/wget
+    [[ -f /usr/bin/wget ]] && WGET=/usr/bin/wget
+    [[ -f /bin/wget ]] && WGET=/bin/wget
+  fi
+  NEW_VER=$(${WGET} -qO- http://nocfs11.noc.aops-eds.com/mhuber/homesync/ | grep latest_ | cut -d_ -f3 | cut -d\< -f1 | sed 's/v//g')
+
+  if [[ $NEW_VER -gt $MY_VER ]]; then
+    echo "[INF] Found profile/rc v${NEW_VER}. Installing..."
+    ${WGET} -q http://nocfs11.noc.aops-eds.com/mhuber/homesync/v${NEW_VER}.tar 
+    ${WGET} -q http://nocfs11.noc.aops-eds.com/mhuber/homesync/v${NEW_VER}_${OSTYPE}.tar
+    tar xf v${NEW_VER}.tar
+    tar xf v${NEW_VER}_${OSTYPE}.tar
+    echo "[INF] New profile/rc [v$NEW_VER] installed. Re-Login or source .profile to activate"
+  fi
+fi
+
+MAIL=/usr/mail/${LOGNAME:?}
+
+## Set erase ##
+/bin/stty erase 
+
+# set-up environment varibles that make life good
+export EXINIT='set ts=4'
+export MANPATH=/usr/local/man:/usr/share/man:/usr/man:/usr/java/man
+export SVN=/space/svn/repositories
+export ARCH=`/bin/uname -m`
+export HOST=$(uname -n | cut -d. -f1)
+export PAGER='less -s'
+
+# Generate complete zone list on s10 systems
+[[ -x /usr/sbin/zoneadm ]] && export ALLZONES=$(/usr/sbin/zoneadm list -ci | grep -v global)
+
+
+# zcode locations
+export ZCODE_PATH="/usr/local/share/zcode:/usr/local/share/zcode/infocom:$HOME/zcode"
+
+OPT_MAN_PATHS="/opt/VRTS/man /opt/VRTSvlic/man /opt/SUNwconn/man \
+  /opt/SUNconn/atm/man /opt/SUNWexplo/man \
+  /opt/samba/man \
+  /opt/csw/man \
+  /usr/sfw/man \
+  /opt/sfw/man \
+  /opt/openwin/man /usr/cluster/man \
+  /opt/SUNWSMS/man /opt/SUNWcstu/man \
+  /opt/CollabNet_Subversion/share/man \
+  /opt/SUNWscat/man \
+  /opt/SUNWvxvm/man \
+  /opt/VRTSllt/man \
+  /opt/VRTSgab/man"
+
+# add optional man paths
+for OPT_MAN in $OPT_MAN_PATHS; do
+  if [[ -d $OPT_MAN ]]; then
+    export MANPATH=${MANPATH}:$OPT_MAN
+  fi
+done
+
+###
+# LD_LIBRARY_PATH relocated to "set_ld" function to build if needed
+#export LD_LIBRARY_PATH=/lib:/usr/local/lib:/usr/local/ssl/lib:/usr/sfw/lib:/opt/sfw/lib:/opt/csw/lib
+
+# build the path
+# first set-up all the components
+
+# Local Directories
+if [[ -d /lc/bin ]]; then
+  AOPS_PATH="/lc/bin"
+else
+  AOPS_PATH=""
+fi
+if [[ -d /usr/local/bin ]]; then
+  LOCAL_PATH="/usr/local/bin"
+else
+  LOCAL_PATH=""
+fi
+if [[ -d /usr/local/sbin ]]; then
+  LOCALS_PATH="/usr/local/sbin"
+else
+  LOCALS_PATH=""
+fi
+if [[ -d /usr/local/sa/bin ]]; then
+  LOCALSA_PATH="/usr/local/sa/bin"
+else
+  LOCALSA_PATH=""
+fi
+
+# Open Source and Freeware directories
+if [[ -d /usr/sfw ]]; then
+  SFW_PATH_U=/usr/sfw/bin
+else
+  SFW_PATH_U=""
+fi
+if [[ -d /opt/sfw ]]; then
+  SFW_PATH_O=/opt/sfw/bin
+else
+  SFW_PATH_O=""
+fi
+if [[ -d /opt/csw ]]; then
+  CSW_PATH=/opt/csw/bin
+else
+  CSW_PATH=""
+fi
+
+# Solaris Crash Analysis Tool
+if [[ -d /opt/SUNWscat ]]; then
+  SCAT_PATH=/opt/SUNWscat/bin
+else
+  SCAT_PATH=""
+fi
+
+# Sun Cluster
+if [[ -d /usr/cluster/bin ]]; then
+  CLUSTER=/usr/cluster/bin
+else
+  CLUSTER=""
+fi
+if [[ -d /opt/SUNWcluster/bin ]]; then
+  CLUSTER2=/opt/SUNWcluster/bin
+else
+  CLUSTER2=""
+fi
+
+# System Administration
+if [[ -d /usr/platform/$ARCH ]]; then
+  PLATFORM=/usr/platform/$ARCH/sbin
+else
+  PLATFORM=""
+fi
+if [[ -s /opt/sun/bin ]]; then
+  SUN_BIN=/opt/sun/bin
+else
+  SUN_BIN=""
+fi
+if [[ -d /opt/sun/hbatools ]]; then
+  HBA_TOOLS=/opt/sun/hbatools
+else
+  HBA_TOOLS=""  
+fi
+
+
+# SAMBA
+if [[ -d /opt/samba ]]; then
+  SAMBA="/opt/samba/bin /opt/samba/sbin"
+else
+  SAMBA="" 
+fi
+
+# Sun System Controller
+if [[ -d /opt/SUNWSMS ]]; then
+  SYS_CTRL=/opt/SUNWSMS/bin
+else
+  SYS_CTRL=""
+fi
+
+#  EMC PowerPath
+if [[ -d /etc/emc/bin ]]; then
+  POWERPATH=/etc/emc/bin
+else
+  POWERPATH=""
+fi
+
+#  Veritas Volume Manager
+if [[ -d /etc/vx/bin ]];  then
+  VX_PATH=/etc/vx/bin
+else
+  VX_PATH=""
+fi
+if [[ -d /opt/vxva/bin ]]; then
+  VXVA_PATH=/opt/vxva/bin
+else
+  VXVA_PATH=""
+fi
+if [ -d /opt/SUNWvxva/bin ]; then
+  SVXVA_PATH=/opt/SUNWvxva/bin
+else
+  SVXVA_PATH=""
+fi
+if [ -d /opt/VRTSvcs/bin ]; then
+  VXCS_PATH=/opt/VRTSvcs/bin
+else
+  VXCS_PATH=""
+fi
+
+# NetBackup
+if [[ -d /usr/openv/netbackup ]]; then
+  NETBACK_PATH="/usr/openv/netbackup/bin /usr/openv/volmgr/bin"
+else
+  NETBACK_PATH=""
+fi
+
+# Scripts
+if [[ -d ${HOME}/scripts ]];  then
+  SCRIPT_PATH=${HOME}/scripts
+else
+  SCRIPT_PATH=""
+fi
+
+if [[ -d ${HOME}/bin ]];  then
+  LBIN=${HOME}/bin
+else
+  LBIN=""
+fi
+
+  
+
+## Subversion
+if [[ -d /opt/CollabNet_Subversion ]]; then
+  SVN_PATH=/opt/CollabNet_Subversion/bin
+else
+  SVN_PATH=""
+fi
+
+# MySQL
+if [[ -d /opt/mysql/bin ]]; then
+  MYSQL_PATH=/opt/mysql/bin
+else
+  MYSQL_PATH=""
+fi
+
+# Cust_Admin Toolkit  (Obsolete)
+#if [[ -d /cust/admin/scripts ]]; then
+#  CUST_ADMIN_PATH="/cust/admin/scripts"
+#else
+#  CUST_ADMIN_PATH=""
+#fi
+
+# LoudCloud (AOPS)
+#if [[ -d /lc/bin ]]; then
+#  LC_PATH=/lc/bin
+#else
+#  LC_PATH=""
+#fi
+
+# Obsoleted by /cust/admin/scripts
+#if [[ -d /opt/EDSsan ]]; then
+#  SAN_PATH=/opt/EDSsan
+#else
+#  SAN_PATH=""
+#fi
+
+# EDS PatchTool
+#if [[ -d /opt/EDSptool ]]; then
+#  PATCH_PATH=/opt/EDSptool/bin
+#else
+#  PATCH_PATH=""
+#fi
+
+# ISM6 commands
+if [[ -d /cust/IBM/ITM/sol283/is/bin ]]; then
+  ISM6_PATH=/cust/IBM/ITM/sol283/is/bin
+else
+  ISM6_PATH=""
+fi
+
+# EMSCLI for command-line interface to Remedy
+if [[ -d /usr/local/scripts/arscli ]]; then
+  EMSCLI_PATH=/usr/local/scripts/arscli
+else
+  EMSCLI_PATH=""
+fi
+
+# Cygwin Paths
+CYG_PATH=$(echo -n $(echo $PATH | sed 's/:/\n/g' | grep cygdrive))
+
+# Opsware Global File system
+if [[ -d /opt/opsware/vmm-ctl/bin ]]; then
+  OPSW_PATH="/opsw/bin /opt/opsware/vmm-ctl/bin /opt/opsware/ogfsutils/bin"
+else
+  OPSW_PATH=""
+fi
+
+
+OS_PATH="/bin /usr/bin /usr/sbin /sbin /usr/ucb /usr/ccs/bin"
+USRLOCAL_PATH="$AOPS_PATH $LOCAL_PATH $LOCALS_PATH $LOCALSA_PATH $LBIN $OPSW_PATH"
+SYSADMIN_PATH="$PLATFORM $SYS_CTRL $SCAT_PATH $SUN_BIN $HBA_TOOLS $POWERPATH"
+CLUSTER_PATH="$CLUSTER $CLUSTER2"
+SCRIPT_PATH="$SCRIPT_PATH $SVN_PATH"
+VERITAS_PATH="$VX_PATH $VXVA_PATH $SVXVA_PATH $VXCS_PATH"
+SFW_PATH="$CSW_PATH $SFW_PATH_U $SFW_PATH_O"
+APPS_PATH="$ISM6_PATH $MYSQL_PATH $SAMBA $NETBACK_PATH $EMSCLI_PATH"
+
+# now simply build the path out of the parts
+FULL_PATH="$OS_PATH $SYSADMIN_PATH $USRLOCAL_PATH $SCRIPT_PATH $CLUST_PATH $VERITAS_PATH $SFW_PATH $APPS_PATH $CYG_PATH"
+for PATH_ELEMENT in $FULL_PATH; do
+  TMP_PATH=${TMP_PATH}${TMP_PATH:+":"}${PATH_ELEMENT}
+done
+PATH=$(echo $TMP_PATH | sed 's/::/:/g')
+export PATH
+hash > /dev/null
+
+# Configure Shell Functions
+case $SHELL in
+  */ksh)  export FPATH=${FPATH:+"$FPATH:"}$HOME/rc/sh_functions ;;
+  */bash) for FUNC in $HOME/rc/sh_functions/*; do
+    [[ -f $FUNC ]] && . $FUNC
+    done ;;
+esac
+
+  # emulate ksh functions in bash
+  [[ $SHELL == "/bin/bash" ]] && . $HOME/rc/kshenv
+
+## homesync now extracts automatically, don't need spool dir anymore
+# set spool dir
+#SPOOL_DIR=${HOME}/spool
+
+# find vim, if it's there, let's use it
+HAVE_VIM=`whence vim`
+
+if [[ -n $HAVE_VIM ]]; then
+  alias vi=$HAVE_VIM 
+fi
+
+# Always use vi as our editor
+set -o vi
+export VISUAL=vi
+
+# determine if we are starting up an interactive session
+if [[ $(tty) != "not a tty" ]]; then
+  # this is an interactive shell
+
+  if [[ ! -d ${HOME}/.history ]]; then
+    mkdir ${HOME}/.history
+  fi
+  export HISTFILE=${HOME}/.history/hist_$$
+  export HISTSIZE=512
+
+  set ignoreeof
+  set noclobber
+  set markdirs
+  set nobeep
+  set visiblebell
+  unset autologout
+  
+  # Set the term if in gnome
+  TERM=${COLORTERM=$TERM}
+
+  # Define the prompt
+  case $SHELL in
+    */bash)
+      # need to wrap color codes in \[ \] to prevent funky line wrap stuff
+      PS1="\[\e[1;37m\][\t $(date +%Z)]\[\e[0;35m\]\u\[\e[0m\]@\[\e[0;32m\]\h\[\e[0m\]:\w > "
+      #PS1="$(color bold,gray,black)[\t $(date +%Z)]$(color normal,purple,black)\u$(color)@$(color normal,green,black)\h$(color):${CURDIR} > "
+      ;;
+    */ksh)
+  . $HOME/rc/sh_functions/cd2 # this will define CURDIR
+  CURDIR=$PWD
+      typeset -RZ2 _x1 _x2 _x3
+      let SECONDS=$(date '+3600*%H+60*%M+%S')
+      _s='(_x1=(SECONDS/3600)%24)==(_x2=(SECONDS/60)%60)==(_x3=SECONDS%60)'
+      TIME='"${_d[_s]}$_x1:$_x2:$_x3"'
+      #PS1="[$TIME]$(logname)@${HOST}:\${CURDIR} > "
+      PS1="$(color bold,gray,black)[$TIME]$(color normal,purple,black)$(logname)$(color)@$(color normal,green,black)${HOST}$(color):\${CURDIR} > "
+      #PS1="$(color bold,gray,black)[$TIME]$(color normal,purple,black)$(logname)$(color)@$(color normal,green,black)${HOST}$(color):\${PWD} > "
+      ;;
+  esac
+export PS1
+
+  # set some aliases
+  if [[ -f $HOME/rc/sh_functions/cd2 ]]; then
+    [[ $SHELL == "/bin/ksh" ]] && alias cd=cd2
+  fi
+
+  if [[ -f $CSW_PATH/python ]]; then
+    alias py=$CSW_PATH/python
+  fi
+
+  if [[ -f /usr/local/bin/vim ]]; then
+    alias vi=/usr/local/bin/vim
+  fi
+
+  # ls with filetype marks, and color if available
+  if [[ -f $HOME/lbin/$ARCH/gls ]]; then
+    alias ls="$HOME/lbin/$ARCH/gls -F --color=auto"
+  else
+    alias ls="ls -F"
+  fi
+
+  # less is better than more
+  if [[ -f /usr/bin/less ]]; then
+    alias more=/usr/bin/less
+  fi
+
+  # Start a dtterm
+  alias dt="/usr/dt/bin/dtterm -bg black -fg yellow -geo 132x36 -xrm *menuBar:false -sl 5000 -display $DISPLAY &"
+
+  # the "wide" ps
+  alias wps="/usr/ucb/ps -awwx"
+
+  # Alternative ssh to use function instead of alias
+  alias ssh="ssh_alt"
+
+  # m0332ussac1 (rhel 5.5) has a weird which alias I don't want
+  alias which >/dev/null 2>&1
+  [[ $? == 0 ]] && unalias which
+
+  # alais the remedy command line
+  [[ -f /usr/local/scripts/arscli/emscli ]] && alias remedy=/usr/local/scripts/arscli/emscli
+
+  # 2009.03.30 - /etc/emc/bin is where these are in new versions of powerpath, added to path
+  # EMC Powerpath is in /etc, so instead of including /etc in the path, 
+  # we create aliases for the known binaries
+  #alias emcpmgr="/etc/emcpmgr"
+  #alias emcpreg="/etc/emcpreg"
+  #alias emcpsf_unload="/etc/emcpsf_unload"
+  #alias emcpupgrade="/etc/emcpupgrade"
+  #alias powercf="/etc/powercf"
+  #alias powermt="/etc/powermt"
+  #alias powervxvm="/etc/powervxvm"
+
+  ### don't need this with the new homesync
+  # create a fresh tar of the .ssh directory each time we login to
+  # the "master" server
+  # if [[ $HOST != 'nocfs12' ]]; then
+    # if we aren't on the "master" server then process any
+    # *.tar.gz files that exist in the spool directory
+  #   FILE_LIST=`ls ${SPOOL_DIR}`
+
+  #   if [[ -n $FILE_LIST ]];  then
+
+  #     echo '' 
+
+  #     for FILENAME in $FILE_LIST; do
+  #       if [[ $FILENAME != 'CVS' ]] ; then
+  #         TAR_GZ=$FILENAME
+  #         gunzip -c ${SPOOL_DIR}/${TAR_GZ} | tar -xf - 2> /dev/null
+  #         rm -f ${SPOOL_DIR}/$TAR_GZ
+  #         echo "NOTE: processed ${SPOOL_DIR}/$TAR_GZ"
+  #         DESPOOL=1
+  #       fi
+  #     done
+  #   fi
+  # fi
+
+  # get rid of any of the local.* that might have been copied during
+  # account creation
+  rm -f local.* .kshrc 2> /dev/null
+
+  # create the .forward so any email for me is sent to the right place
+  # echo "matt.huber@hp.com" > .forward
+
+  # insure that the .ssh directory is protected
+  chmod 700 .ssh 2> /dev/null
+
+  # hash again to insure any new scripts/binaries are found
+  hash > /dev/null
+
+  # Set Window Title
+  titlebar
+
+  # Verify that .profile is a link
+  if [[ ! -L ${HOME}/.profile ]]; then
+    [[ -f ${HOME}/.profile ]] && rm ${HOME}/.profile
+    ln -s rc/profile ${HOME}/.profile
+    DESPOOL=1
+  fi
+
+  # get rid of legacy .linux_model file if it exists
+  [[ -f ${HOME}/.linux_model ]] && rm ${HOME}/.linux_model
+
+  echo ''
+fi
+

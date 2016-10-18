@@ -1,0 +1,56 @@
+# $Id: console 15 2008-08-28 22:46:52Z sz3007 $
+#
+# << Description of the script >>
+#
+# $Log: console,v $
+# Revision 1.1.1.1  2004/11/30 16:03:25  t7873mh
+# Initial import into Concurrent Versions System
+#
+# 2008.09.02
+#	  renamed from "console" to "con" and reworked logic to use /bin/console instead of an input file
+
+###
+# Possible alternative logic to auto determine console server and connect automagically.
+# currently gets the following error:
+# console: could not open `/dev/tty': No such device or address
+# console: could not get password from tty for `usplgmtscon001'
+###
+
+function console2 {
+	HOST=$(print $1 | tr '[A-Z]' '[a-z]') # Lowercase the server name
+	cat ~/data/conservers.dat | grep ^$(uname -n)  | sed 's/:/ /g' | while read a_CONSERV a_CONEXE a_CF; do
+		HOST_CF=$(grep $HOST $a_CF | cut -d " " -f2)
+		if [[ -n $HOST_CF ]]; then
+			if (( $( print $HOST_CF | grep -c " ") >= 1 )); then
+				print "Non-unique input '$HOST' on '$a_CONSERV'. Retry with unique server name."
+			else
+				CONSERVER=$a_CONSERV
+				CONSOLE_BIN=$(print $a_CONEXE | sed 's/_/ /g')
+			fi
+		fi
+	done
+	if [[ -z $CONSERVER ]]; then
+		print "No console server for $HOST found..."
+	else 
+		titlebar console $SERVER
+		ssh $CONSERVER "titlebar console $HOST;$CONSOLE_BIN $HOST;titlebar"
+	fi
+}
+
+###
+# Old logic here for posterity
+###
+
+#function console {
+#	SERVER=$(print $1 | cut -d. -f1)
+#	grep $SERVER ~/data/consoles | grep -v "#" | read TS_TYPE HOST TERMSERV PORT
+#	titlebar console $HOST
+#	case $TS_TYPE in
+#		"ts") telnet $TERMSERV $PORT ;; ## TERMSERVER
+#		"sc") ssh -t $TERMSERV "/opt/SUNWSMS/bin/console -e! -d $PORT" ;; ##SYSTEM CONTROLLER
+#		"al") ssh $TERMSERV ;;  ## ALOM
+#		*)	 print "Unknown Terminal Server Type: $TS_TYPE" ;;
+#	esac
+#	titlebar
+#}
+
