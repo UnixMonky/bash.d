@@ -20,7 +20,7 @@ echo "[[ profile/rc v${MY_VER} ]]"
 MAIL=/usr/mail/${LOGNAME:?}
 
 ## Set erase ##
-/bin/stty erase 
+## /bin/stty erase ◘
 
 # set-up environment varibles that make life good
 export EXINIT='set ts=4'
