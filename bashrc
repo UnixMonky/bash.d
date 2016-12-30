@@ -5,6 +5,7 @@
 # .bashrc is used for interactive login shells
  
 # v49 : 2016-10-18 : Copied from v48 and genericized
+# v50 : 2016-12-30 : moved hardware determination from titlebar function to bashrc
 
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
@@ -107,6 +108,61 @@ for PATH_ELEMENT in $FULL_PATH; do
 done
 export PATH
 hash > /dev/null
+
+###
+# Determine hardware info
+###
+if [[ -f ${HOME}/.hwinfo ]]; then
+  . ${HOME}/.hwinfo
+else
+  # figure out the hardware info and write it to the file
+  OS=$(uname)
+  case $OS in
+
+    SunOS)  HARDWARE="$(uname -i | cut -d, -f2)"
+      RELEASE="$(head -1 /etc/release | awk '{print $3}')"
+      [[ $RELEASE = "HW" ]] && RELEASE="$(head -1 /etc/release | awk '{print $4}')"
+      OSNAME="$(uname -s -r) ${RELEASE}"
+      CPU=$(/usr/sbin/psrinfo | wc -l | awk '{print $1}')
+      RAM=$(/usr/sbin/prtconf | grep Mem | awk '{print $3/1024}')
+      ;;
+
+    Linux)  # get hardcoded values first if any
+      if [[ -f ${HOME}/.hwinfo ]]; then
+              . ${HOME}/.hwinfo
+      fi
+      # dynamically figure out what we have available
+      if [[ -f /usr/bin/lshal ]]; then
+              HARDWARE=$(/usr/bin/lshal | grep "system.hardware.product" | cut -d"'" -f2)
+              CPU=$(grep -c processor /proc/cpuinfo)
+              # for RAM, sum MemTotal plus Buffers, then divide out to give GB
+              RAM=$(echo "($(grep ^MemTotal: /proc/meminfo|awk '{print $2}')+$(grep ^Buffers: /proc/meminfo|awk '{print $2}'))/1000/1000"| bc)
+      elif [[ -f /usr/bin/lshw ]]; then
+              HARDWARE=$(/usr/bin/lshw 2> /dev/null | grep "^    prod" | cut -d: -f2 | sed -e 's/^[[:space:]]*//')
+              CPU=$(lshw -c cpu 2> /dev/null | fgrep -c '*-cpu:')
+              RAM=$(lshw -c memory 2> /dev/null | grep size | cut -d: -f2 | sed -e 's/^[[:space:]]*//')
+      fi
+      if [[ -f /etc/os-release ]]; then
+              OSNAME=$(grep PRETTY_NAME /etc/os-release | cut -d\" -f2)
+      elif [[ -f /etc/redhat-release ]]; then
+              OSNAME="RHEL $(cat /etc/redhat-release | cut -d\  -f7-)"
+      else
+              OSNAME="Linux (Unknown)"
+      fi
+      ;;
+    
+  esac
+  cat <<-EOF >${HOME}/.hwinfo
+    HARDWARE="${HARDWARE}"
+    CPU="${CPU}"
+    RAM="${RAM}"
+    OSNAME="${OSNAME}"
+EOF
+fi  
+
+HOSTNAME="$(uname -n | cut -d. -f1)"
+
+export HARDWARE CPU RAM OSNAME HOSTNAME
 
 ###
 # Configure Shell Functions
