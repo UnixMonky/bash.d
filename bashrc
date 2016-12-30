@@ -162,7 +162,11 @@ fi
 
 HOSTNAME="$(uname -n | cut -d. -f1)"
 
-export HARDWARE CPU RAM OSNAME HOSTNAME
+export HARDWARE
+export CPU
+export RAM
+export OSNAME
+export HOSTNAME
 
 ###
 # Configure Shell Functions
