@@ -12,7 +12,7 @@ function titlebar {
 		console) TITLEBAR="Local console on $2" ;;
 		dsview)  TITLEBAR="Local console (DSView) on $2" ;;
 		ports)	 TITLEBAR="$2 port forward via ${HOSTNAME}" ;;
-		*)		 TITLEBAR="${HOSTNAME} [${OSNAME} ${RELEASE} ${HARDWARE} ${CPU} cpu/${RAM}gb ram]" ;;
+		*)		 TITLEBAR="${HOSTNAME} [${OSNAME} | ${HARDWARE} | ${CPU}x${RAM}]" ;;
 	esac
 	case $TERM in
 		putty|xterm-color|dtterm|xterm|vt220|vt100)  \
