@@ -10,8 +10,7 @@
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
 
-
-MY_VER=49
+MY_VER=50
 echo "[[ profile/rc v${MY_VER} ]]"
 
 ## Removed auto-updating code here, may replace later
