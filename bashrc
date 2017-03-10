@@ -6,11 +6,12 @@
  
 # v49 : 2016-10-18 : Copied from v48 and genericized
 # v50 : 2016-12-30 : moved hardware determination from titlebar function to bashrc
+# v51 : 2016-03-10 : reworked PS1 prompt to include status
 
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
 
-MY_VER=50
+MY_VER=51
 echo "[[ profile/rc v${MY_VER} ]]"
 
 ## Removed auto-updating code here, may replace later
@@ -224,30 +225,38 @@ TERM=xterm-color
 ###
 case $SHELL in
     */bash)
-      TITLEBAR="\`titlebar\`" ## this runs the function but doesn't change the prompt
-      SMILEY="\`if [ \$? = 0 ]; then echo \[\e[33m\]^_^\[\e[0m\]; else echo \[\e[31m\]O_O\[\e[0m\]; fi\`"
-      TIME="\[\e[1;37m\][\t $(date +%Z)]"
-      USER="\[\e[0;35m\]\u\[\e[0m\]@\[\e[0;32m\]\h\[\e[0m\]"
-      MYPWD="\W"
-#       PROMPT_COMMAND='MYPWD=$(echo -n "${PWD/#$HOME/~}" | awk -F "/" '"'"'{
-# if (length($0) > 14) { if (NF>4) print $1 "/" $2 "/.../" $(NF-1) "/" $NF;
-# else if (NF>3) print $1 "/" $2 "/.../" $NF;
-# else print $1 "/.../" $NF; }
-# else print $0;}'"'"')'
-      PS1="${TITLEBAR}${SMILEY}${TIME}${USER}:${MYPWD} > "
-      #PS1="$(color bold,gray,black)[\t $(date +%Z)]$(color normal,purple,black)\u$(color)@$(color normal,green,black)\h$(color):${CURDIR} > "
-      ;;
-    */ksh)
-      . $HOME/rc/sh_functions/cd2 # this will define CURDIR
-      CURDIR=$PWD
-      typeset -RZ2 _x1 _x2 _x3
-      let SECONDS=$(date '+3600*%H+60*%M+%S')
-      _s='(_x1=(SECONDS/3600)%24)==(_x2=(SECONDS/60)%60)==(_x3=SECONDS%60)'
-      TIME='"${_d[_s]}$_x1:$_x2:$_x3"'
-      #PS1="[$TIME]$(logname)@${HOST}:\${CURDIR} > "
-      PS1="$(color bold,gray,black)[$TIME]$(color normal,purple,black)$(logname)$(color)@$(color normal,green,black)${HOST}$(color):\${CURDIR} > "
-      #PS1="$(color bold,gray,black)[$TIME]$(color normal,purple,black)$(logname)$(color)@$(color normal,green,black)${HOST}$(color):\${PWD} > "
-      ;;
+      export PROMPT_COMMAND=bash_prompt_command
+
+      bash_prompt_command () {
+        # exit must be first
+        local EXIT=$?
+
+        # define colors
+        local GREEN="\[\033[0;32m\]"
+        local RED="\[\033[0;31m\]"
+        local WHITE="\[\033[1;37m\]"
+        # return color to Terminal setting for text color
+        local DEFAULT="\[\033[0;39m\]"
+
+        # set various promt variables
+        local TIME="${WHITE}[\t $(date +%Z)]"
+        local TITLEBAR='`titlebar`'
+        if [[ ${EXIT} -ne 0 ]]; then
+          STATUS="${RED} ✘ "
+        else
+          STATUS="${GREEN} ✔ "
+        fi
+        local USER="\[\e[0;35m\]\u\[\e[0m\]@\[\e[0;32m\]\h\[\e[0m\]"
+        local MYPWD='$(echo -n "${PWD/#$HOME/~}" | awk -F "/" '"'"'{
+          if (length($0) > 20) { if (NF>4) print $1 "/" $2 "/.../" $(NF-1) "/" $NF;
+          else if (NF>3) print $1 "/" $2 "/.../" $NF;
+          else print $1 "/.../" $NF; }
+          else print $0;}'"'"')'
+
+        # put it all together
+        export PS1="${TITLEBAR}${STATUS}${TIME}${DEFAULT} ${MYPWD} > "
+      }
+
   esac
 
 ###
