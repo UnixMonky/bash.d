@@ -256,9 +256,9 @@ case $SHELL in
         local TIME="${WHITE}[\t $(date +%Z)]"
         local TITLEBAR='`titlebar`'
         if [[ ${EXIT} -ne 0 ]]; then
-          STATUS="${RED}✘"
+          STATUS="${RED}✗"
         else
-          STATUS="${GREEN}✔"
+          STATUS="${GREEN}✓"
         fi
         if [ "`whoami`" = "root" ]; then
           USERCOLOR=${RED}
