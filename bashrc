@@ -232,9 +232,23 @@ case $SHELL in
         local EXIT=$?
 
         # define colors
-        local GREEN="\[\033[0;32m\]"
+        local BLACK="\[\033[0;30m\]"
         local RED="\[\033[0;31m\]"
-        local WHITE="\[\033[1;37m\]"
+        local GREEN="\[\033[0;32m\]"
+        local YELLOW="\[\033[0;33m\]"
+        local BLUE="\[\033[0;34m\]"
+        local MAGENTA="\[\033[0;35m\]"
+        local CYAN="\[\033[0;36m\]"
+        local LIGHTGRAY="\[\033[0;37m\]"
+        local DARKGRAY="\[\033[0;90m\]"
+        local LIGHTRED="\[\033[0;91m\]"
+        local LIGHTGREEN="\[\033[0;92m\]"
+        local LIGHTYELLOW="\[\033[0;93m\]"
+        local LIGHTBLUE="\[\033[0;94m\]"
+        local LIGHTMAGENTA="\[\033[0;95m\]"
+        local LIGHTCYAN="\[\033[0;96m\]"
+        local WHITE="\[\033[0;97m\]"
+
         # return color to Terminal setting for text color
         local DEFAULT="\[\033[0;39m\]"
 
@@ -242,11 +256,17 @@ case $SHELL in
         local TIME="${WHITE}[\t $(date +%Z)]"
         local TITLEBAR='`titlebar`'
         if [[ ${EXIT} -ne 0 ]]; then
-          STATUS="${RED} ✘ "
+          STATUS="${RED}✘"
         else
-          STATUS="${GREEN} ✔ "
+          STATUS="${GREEN}✔"
         fi
-        local USER="\[\e[0;35m\]\u\[\e[0m\]@\[\e[0;32m\]\h\[\e[0m\]"
+        if [ "`whoami`" = "root" ]; then
+          USERCOLOR=${RED}
+        else
+          USERCOLOR=${BLUE}
+        fi
+        local USER="${USERCOLOR}\u"
+        local HOST="${GREEN}\h$"
         local MYPWD='$(echo -n "${PWD/#$HOME/~}" | awk -F "/" '"'"'{
           if (length($0) > 20) { if (NF>4) print $1 "/" $2 "/.../" $(NF-1) "/" $NF;
           else if (NF>3) print $1 "/" $2 "/.../" $NF;
@@ -254,7 +274,12 @@ case $SHELL in
           else print $0;}'"'"')'
 
         # put it all together
-        export PS1="${TITLEBAR}${STATUS}${TIME}${DEFAULT} ${MYPWD} > "
+        PS1="${TITLEBAR}"
+        PS1+=" ${STATUS}"
+        PS1+=" ${TIME}"
+        PS1+=" ${DEFAULT}(${USERCOLOR}${USER}${DEFAULT}@${GREEN}${HOST}${DEFAULT})"
+        PS1+=":${MYPWD} > "
+        export PS1
       }
 
   esac
