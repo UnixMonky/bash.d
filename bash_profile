@@ -3,5 +3,8 @@
 # # # # # # # # # # # # # #
 
 # .bash_profile is used for non-interactive login shells
- 
-# v49 : 2016-10-18 : Empty file, will populate as necessary
+# v51 : 2017-03-13 : Added call to bashrc
+
+if [ -f ~/.bashrc ]; then
+   source ~/.bashrc
+fi
