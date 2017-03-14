@@ -21,14 +21,14 @@ echo "[[ .bashrc v${MY_VER} ]]"
 # this allows more granular customization of the environment
 
 for RCFILE in $(ls ${HOME}/rc.d/rc[0-9][0-9]_*) ; do
-  source ${HOME}/rc.d/${RCFILE}
+  source ${RCFILE}
 done
 
 ###
 # Configure Shell Functions
 ###
 for FUNC in $(ls ${HOME}/rc.d/f_*) ; do
-  source ${HOME}/rc.d/${FUNC}
+  source ${FUNC}
 done
 
 export PROMPT_COMMAND=bash_prompt_command
