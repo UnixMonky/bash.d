@@ -1,0 +1,32 @@
+### 
+# build the PATH environment
+###
+
+## first set-up all the components
+
+# OS Directories
+OS_PATH=()
+OS_PATH+=('/bin')
+OS_PATH+=('/usr/bin')
+OS_PATH+=('/usr/sbin')
+OS_PATH+=('/sbin')
+OS_PATH+=('/usr/ucb')
+
+# Local Directories
+LOCAL_PATHS=()
+LOCAL_PATHs+=('/usr/local/bin')       # local binaries
+LOCAL_PATHS+=('/usr/local/sbin')      # local system binaries
+
+# Utilities
+LOCAL_PATHS+=('/opt/samba/bin')           # SAMBA
+LOCAL_PATHS+=('/opt/samba/sbin')          # SAMBA
+LOCAL_PATHS+=('/opt/mysql/bin')           # MySQL
+LOCAL_PATHS+=($(echo -n $(echo $PATH | sed 's/:/\n/g' | grep cygdrive))) #cygwin
+
+# local
+LOCAL_PATHS+=("${HOME}/scripts")          # my scripts
+
+for PATH_ELEMENT in $FULL_PATH; do
+  if [ -d $PATH_ELEMENT ]; then PATH="$PATH:$PATH_ELEMENT"; fi
+done
+export PATH

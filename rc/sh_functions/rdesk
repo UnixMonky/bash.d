@@ -1,3 +1,0 @@
-function rdesk {
-   nohup /usr/local/bin/rdesktop -u sz3007 -a24 -g1152x900 -r sound:remote 53.231.157.134 &
-}

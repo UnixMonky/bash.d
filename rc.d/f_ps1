@@ -1,0 +1,35 @@
+###
+# Define the shell prompt
+###
+bash_prompt_command () {
+    # exit must be first
+    local EXIT=$?
+
+    # set various promt variables
+    local TIME="${WHITE}[\t $(date +%Z)]"
+    if [[ ${EXIT} -ne 0 ]]; then
+      STATUS="${RED}✗"
+    else
+      STATUS="${GREEN}✓"
+    fi
+    if [ "`whoami`" = "root" ]; then
+      USERCOLOR=${RED}
+    else
+      USERCOLOR=${BLUE}
+    fi
+    local USER="${USERCOLOR}\u"
+    local HOST="${GREEN}\h$"
+    local MYPWD='$(echo -n "${PWD/#$HOME/~}" | awk -F "/" '"'"'{
+      if (length($0) > 20) { if (NF>4) print $1 "/" $2 "/.../" $(NF-1) "/" $NF;
+      else if (NF>3) print $1 "/" $2 "/.../" $NF;
+      else print $1 "/.../" $NF; }
+      else print $0;}'"'"')'
+
+    # put it all together
+    PS1=" ${STATUS}"
+    PS1+=" ${TIME}"
+    PS1+=" ${DEFAULT}(${USERCOLOR}${USER}${DEFAULT}@${GREEN}${HOST}${DEFAULT})"
+    PS1+=" ${MYPWD} > "
+    export PS1
+}
+
