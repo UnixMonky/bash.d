@@ -1,3 +1,19 @@
 ###
 # Set aliases if desired
 ###
+
+# set ls coloring
+export LS_OPTIONS='--color=auto'
+if [[ -f ~/rc.d/dircolors ]]; then
+    eval "$(dircolors ~/rc.d/dircolors)"
+else
+    eval "$(dircolors)"
+fi
+alias ls='/bin/ls $LS_OPTIONS'
+alias ll="/bin/ls $LS_OPTIONS -l"
+alias la="/bin/ls $LS_OPTIONS -lA"
+
+# force vim if it exists
+if [[ -f $(/usr/bin/which vim) ]]; then
+        alias vi="$(/usr/bin/which vim)"
+fi
