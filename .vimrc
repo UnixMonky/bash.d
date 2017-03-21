@@ -18,3 +18,6 @@ set directory=/tmp            " path of swap file
 syntax enable
 set background=dark
 colorscheme solarized
+
+" add write as root 
+cmap w!! w !sudo tee >/dev/null %

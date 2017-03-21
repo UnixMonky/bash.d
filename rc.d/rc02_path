@@ -26,7 +26,7 @@ LOCAL_PATHS+=($(echo -n $(echo $PATH | sed 's/:/\n/g' | grep cygdrive))) #cygwin
 # local
 LOCAL_PATHS+=("${HOME}/scripts")          # my scripts
 
-for PATH_ELEMENT in $FULL_PATH; do
+for PATH_ELEMENT in "${OS_PATH[@]}" "${LOCAL_PATHS[@]}"; do
   if [ -d $PATH_ELEMENT ]; then PATH="$PATH:$PATH_ELEMENT"; fi
 done
 export PATH
