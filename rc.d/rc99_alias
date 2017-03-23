@@ -3,7 +3,7 @@
 ###
 
 # set ls coloring
-export LS_OPTIONS='--color=auto'
+export LS_OPTIONS='-F --color=auto'
 if [[ -f ~/rc.d/dircolors ]]; then
     eval "$(dircolors ~/rc.d/dircolors)"
 else
