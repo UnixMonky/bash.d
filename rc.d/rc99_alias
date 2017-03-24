@@ -9,9 +9,13 @@ if [[ -f ~/rc.d/dircolors ]]; then
 else
     eval "$(dircolors)"
 fi
-alias ls='/bin/ls $LS_OPTIONS'
-alias ll="/bin/ls $LS_OPTIONS -l"
-alias la="/bin/ls $LS_OPTIONS -lA"
+
+# set grep coloring
+alias grep='grep --color=auto'
+
+alias ls='ls $LS_OPTIONS'
+alias ll="ls $LS_OPTIONS -l"
+alias la="ls $LS_OPTIONS -lA"
 
 # force vim if it exists
 if [[ -f $(/usr/bin/which vim) ]]; then
