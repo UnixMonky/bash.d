@@ -1,6 +1,6 @@
 # set-up environment varibles that make life good
-set ignoreeof      # prevent ^D from logging out
-set noclobber      # prevent overwrite of files
+set -o ignoreeof      # prevent ^D from logging out
+set -o noclobber      # prevent overwrite of files
 set bell-style visible  # Flash instead of beep
 unset TMOUT        # prevent autologout
 
@@ -26,4 +26,4 @@ export HISTSIZE=512
 ###
 # insure that the .ssh directory is protected
 ###
-chmod 700 .ssh 2> /dev/null
+chmod 600 .ssh 2> /dev/null
