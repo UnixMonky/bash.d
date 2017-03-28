@@ -3,7 +3,11 @@
 ###
 
 # set ls coloring
-export LS_OPTIONS='-F --color=auto'
+LS_OPTIONS=''
+LS_OPTIONS+='-F '             # add / to directories
+LS_OPTIONS+='--color=auto '   # colorize
+LS_OPTIONS+='-H '             # follow symlinks 
+
 if [[ -f ~/rc.d/dircolors ]]; then
     eval "$(dircolors ~/rc.d/dircolors)"
 else
