@@ -1,32 +1,46 @@
-### 
+###
 # build the PATH environment
 ###
 
-## first set-up all the components
+## Utility function for building path
+function join_by { local IFS="$1"; shift; echo "$*"; }
 
+## Define paths
 # OS Directories
 OS_PATH=()
-OS_PATH+=('/bin')
-OS_PATH+=('/usr/bin')
-OS_PATH+=('/usr/sbin')
-OS_PATH+=('/sbin')
-OS_PATH+=('/usr/ucb')
+OS_PATH+=("/bin")
+OS_PATH+=("/usr/bin")
+OS_PATH+=("/usr/sbin")
+OS_PATH+=("/sbin")
+OS_PATH+=("/usr/ucb")
 
 # Local Directories
 LOCAL_PATHS=()
-LOCAL_PATHs+=('/usr/local/bin')       # local binaries
-LOCAL_PATHS+=('/usr/local/sbin')      # local system binaries
+LOCAL_PATHS+=("/usr/local/bin")        # local binaries
+LOCAL_PATHS+=("/usr/local/sbin")       # local system binaries
+
+# User-based local directories
+LOCAL_PATHS+=("${HOME}/.local/bin")    # user local binaries
 
 # Utilities
-LOCAL_PATHS+=('/opt/samba/bin')           # SAMBA
-LOCAL_PATHS+=('/opt/samba/sbin')          # SAMBA
-LOCAL_PATHS+=('/opt/mysql/bin')           # MySQL
-LOCAL_PATHS+=($(echo -n $(echo $PATH | sed 's/:/\n/g' | grep cygdrive))) #cygwin
+LOCAL_PATHS+=("/opt/samba/bin")        # SAMBA
+LOCAL_PATHS+=("/opt/samba/sbin")       # SAMBA
+LOCAL_PATHS+=("/opt/mysql/bin")        # MySQL
+LOCAL_PATHS+=("/usr/local/pulse")      # Pulse Secure
+
+LOCAL_PATHS+=($(echo -n $(echo $PATH | sed "s/:/\n/g" | grep cygdrive))) #cygwin
 
 # local
-LOCAL_PATHS+=("${HOME}/scripts")          # my scripts
+LOCAL_PATHS+=("${HOME}/scripts")       # my scripts
 
+# games
+LOCAL_PATHS+=("/usr/games")            # games
+LOCAL_PATHS+=("/usr/local/games")      # games
+
+FULL_PATH=()
 for PATH_ELEMENT in "${OS_PATH[@]}" "${LOCAL_PATHS[@]}"; do
-  if [ -d $PATH_ELEMENT ]; then PATH="$PATH:$PATH_ELEMENT"; fi
+  if [ -d $PATH_ELEMENT ]; then FULL_PATH+=("$PATH_ELEMENT"); fi
 done
+PATH=$(join_by : ${FULL_PATH[@]})
 export PATH
+unset join_by OS_PATH LOCAL_PATHS FULL_PATH
