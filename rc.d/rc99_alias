@@ -19,7 +19,8 @@ alias grep='grep --color=auto'
 
 alias ls='ls $LS_OPTIONS'
 alias ll="ls $LS_OPTIONS -l"
-alias la="ls $LS_OPTIONS -lA"
+alias la="ls $LS_OPTIONS -A"
+alias lla="ls $LS_OPTIONS -lA"
 
 # force vim if it exists
 if [[ -f $(/usr/bin/which vim) ]]; then
