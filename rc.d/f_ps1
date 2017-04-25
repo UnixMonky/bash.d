@@ -25,10 +25,18 @@ bash_prompt_command () {
       else print $1 "/.../" $NF; }
       else print $0;}'"'"')'
 
+    local BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ {\1}/')
+      if [[ ${BRANCH} == "{master}" ]]; then
+        local GITCOLOR=${FG_YELLOW}
+      else
+        local GITCOLOR=${FG_GREEN}
+      fi
+
     # put it all together
     PS1=" ${STATUS}"
     PS1+=" ${TIME}"
     PS1+=" ${FG_DEFAULT}(${USER}${FG_DEFAULT}@${HOST}${FG_DEFAULT})"
+    PS1+="${GITCOLOR}${BRANCH}${FG_DEFAULT}"
     PS1+=" ${MYPWD} > "
     export PS1
 }
