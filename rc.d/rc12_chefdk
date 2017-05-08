@@ -1,0 +1,7 @@
+#+--------------------------------------+
+#| Configure environment for chef/knife |
+#+--------------------------------------+
+
+if [[ -f /usr/bin/chef ]]; then
+  eval "$(chef shell-init bash)"
+fi
