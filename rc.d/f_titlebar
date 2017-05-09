@@ -1,0 +1,9 @@
+function titlebar {
+
+  OS=$(grep PRETTY_NAME /etc/os-release | cut -d\" -f2)
+  HOST=$(hostname)
+  TITLEBAR="${HOST} [${OS}]"
+
+  #update titlebar
+  echo -ne "\033]0;${TITLEBAR}\007"
+}

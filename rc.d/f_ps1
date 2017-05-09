@@ -39,5 +39,8 @@ bash_prompt_command () {
     PS1+="${GITCOLOR}${BRANCH}${FG_DEFAULT}"
     PS1+=" ${MYPWD} > "
     export PS1
+
+    # update the titlebar
+    titlebar
 }
 
