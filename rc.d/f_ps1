@@ -25,18 +25,26 @@ bash_prompt_command () {
       else print $1 "/.../" $NF; }
       else print $0;}'"'"')'
 
+    # set git branch if in git repo
     local BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ {\1}/')
-      if [[ ${BRANCH} == "{master}" ]]; then
+      if [[ ${BRANCH} == " {master}" ]]; then
         local GITCOLOR=${FG_YELLOW}
       else
         local GITCOLOR=${FG_GREEN}
       fi
+
+    # set chef block if in chef repo
+    if [[ "${PWD}" == *"/chef-repo"* ]]; then
+      local CHEF=" @=$(/opt/chefdk/bin/knife block list | grep Current | awk '{printf("%s",$2)}')"
+      local CHEFCOLOR=${FG_CYAN}
+    fi
 
     # put it all together
     PS1=" ${STATUS}"
     PS1+=" ${TIME}"
     PS1+=" ${FG_DEFAULT}(${USER}${FG_DEFAULT}@${HOST}${FG_DEFAULT})"
     PS1+="${GITCOLOR}${BRANCH}${FG_DEFAULT}"
+    PS1+="${CHEFCOLOR}${CHEF}${FG_DEFAULT}"
     PS1+=" ${MYPWD} > "
     export PS1
 
