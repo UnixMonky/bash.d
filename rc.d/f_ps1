@@ -35,7 +35,7 @@ bash_prompt_command () {
 
     # set chef block if in chef repo
     if [[ "${PWD}" == *"/chef-repo"* ]]; then
-      local CHEF=" @=$(readlink ~/.chef/knife.rb | awk -F- '{print $NF}' | cut -d. -f1)"
+      local CHEF=" @=|$(readlink ~/.chef/knife.rb | awk -F- '{print $NF}' | cut -d. -f1)|"
       local CHEFCOLOR=${FG_CYAN}
     fi
 
