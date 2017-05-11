@@ -27,3 +27,11 @@ export HISTSIZE=512
 # insure that the .ssh directory is protected
 ###
 chmod 700 .ssh 2> /dev/null
+
+###
+# Verify we have a valid term, if not redefine it
+###
+if [[ ! -f /usr/share/terminfo/${TERM:0:1}/${TERM} ]]; then
+  # this term doesn't exit, try xterm or vt
+  [[ -f /usr/share/terminfo/x/xterm-256color ]] && export TERM=xterm-256color || export TERM=vt220
+fi
