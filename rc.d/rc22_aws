@@ -1,8 +1,7 @@
 # +------------------------------------------------+
 # | Configure AWS command line for auto completion |
 # +------------------------------------------------+
-set -x
+
 AWS_COMPLETER=$(which aws_completer)
 
 [[ -f ${AWS_COMPLETER} ]] && complete -C ${AWS_COMPLETER} aws
-set +x
