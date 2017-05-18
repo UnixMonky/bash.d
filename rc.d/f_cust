@@ -1,0 +1,29 @@
+# +-----------------------------------------------------+
+# | Dynamic Customer-specific Environment Configuration |
+# +-----------------------------------------------------+
+
+function cust {
+
+  export CURRENT_CUST=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+
+  [[ -f knife-${CURRENT_CUST}.rb ]] && rm ~/.chef/knife.rb && ln -s knife-${CURRENT_CUST}.rb ~/.chef/knife.rb
+  [[ -d ~/chef-repo-${CURRENT_CUST} ]] && rm ~/chef-repo && ln -s chef-repo-${CURRENT_CUST} ~/chef-repo
+  if [[ -d ~/.aws/config.d ]]; then
+    rm  ~/.aws/config
+    echo "[default]" > ~/.aws/config
+    cat ~/.aws/config.d/${CURRENT_CUST} >> ~/.aws/config 2>/dev/null
+    for CONF in ~/.aws/config.d/*; do
+      echo "[profile ${CONF##*/}]" >> ~/.aws/config
+      cat $CONF >> ~/.aws/config
+    done
+  fi
+  if [[ -d ~/.aws/credentials.d ]]; then
+    rm  ~/.aws/credentials
+    echo "[default]" > ~/.aws/credentials
+    cat ~/.aws/credentials.d/${CURRENT_CUST} >> ~/.aws/credentials 2>/dev/null
+    for CRED in ~/.aws/credentials.d/*; do
+      echo "[profile ${CRED##*/}]" >> ~/.aws/credentials
+      cat $CRED >> ~/.aws/credentials
+    done
+  fi
+}

@@ -6,3 +6,4 @@ FILE=$1
 [[ -n $FILE ]] && cp -p ${FILE} ${FILE}_${DATE}
 [[ -f $FILE_$DATE ]] && echo "${FILE} saved as ${FILE}_{$DATE}"
 }
+
