@@ -9,9 +9,9 @@ LS_OPTIONS+='--color=auto '   # colorize
 LS_OPTIONS+='-H '             # follow symlinks 
 
 if [[ -f ~/rc.d/dircolors ]]; then
-    eval "$(dircolors ~/rc.d/dircolors)"
+eval "$(dircolors ~/rc.d/dircolors)"
 else
-    eval "$(dircolors)"
+eval "$(dircolors)"
 fi
 
 # set grep coloring
@@ -24,5 +24,11 @@ alias lla="ls $LS_OPTIONS -lA"
 
 # force vim if it exists
 if [[ -f $(/usr/bin/which vim) ]]; then
-        alias vi="$(/usr/bin/which vim)"
+  if [[ -f $(/usr/bin/which gvim) ]]; then
+    alias vi="$(/usr/bin/which gvim)"
+    alias vim="$(/usr/bin/which gvim)"
+  else
+    alias vi="$(/usr/bin/which vim)"
+  fi
 fi
+
