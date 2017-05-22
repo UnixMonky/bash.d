@@ -36,10 +36,9 @@ bash_prompt_command () {
       fi
 
     # set chef block if in chef repo
-    if [[ "${PWD}" == *"/chef-repo"* ]]; then
-      local CHEF=" @=|$(readlink ~/.chef/knife.rb | awk -F- '{print $NF}' | cut -d. -f1)|"
-      local CHEFCOLOR=${FG_CYAN}
-    fi
+    local CHEF=$(echo ${PWD#*chef-repo/} | cut -d/ -f1)
+    [[ -n ${CHEF} ]] && CHEF=" @=|$CHEF|"
+    local CHEFCOLOR=${FG_CYAN}
 
     # put it all together
     PS1=" ${STATUS}"
