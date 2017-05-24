@@ -1,0 +1,9 @@
+function zarc {
+
+NAME=$1
+shift
+FILES=$@
+[[ ! -d ~/_archive ]] && mkdir ~/_archive
+tar -zcf ~/_archive/${NAME}.tgz ${FILES}
+echo "${FILES} saved to ~/_archive/${NAME}.tgz"
+}
