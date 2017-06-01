@@ -14,6 +14,7 @@ set incsearch         " make search act like modern browsers
 set ffs=unix,dos,mac      " unix as standard filetype
 set textwidth=0         " disable auto line break
 set wrapmargin=0        " these two lines prevent physical linewrap
+set visualbell        " flash instead of beeping
 
 set backup          " enable backing up file on open
 set backupdir=/tmp      " path of backup file
