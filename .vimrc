@@ -27,7 +27,7 @@ colorscheme solarized
 
 " set font
 if has('gui_running')
-  set guifont=Monoisome\ Semi-Condensed\ 10
+  set guifont=Monoisome\ Semi-Condensed\ 8
   set lines=36 columns=120
 endif
 
