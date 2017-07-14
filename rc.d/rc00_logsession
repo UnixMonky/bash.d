@@ -6,7 +6,7 @@ if [ -z "$UNDER_SCRIPT" ]; then
   DATESTAMP=$(date +"%F_%H%M%S")
   LOGDIR=~/logs/term/$(date +"%Y/%m")
   LOGFILE=${LOGDIR}/$(hostname)_${DATESTAMP}.log
-  [[ ! -d ${LOGDIR} ]] && mkdir ${LOGDIR}
+  [[ ! -d ${LOGDIR} ]] && mkdir -p ${LOGDIR}
   export UNDER_SCRIPT=1
   script -f -q ${LOGFILE}
   exit
