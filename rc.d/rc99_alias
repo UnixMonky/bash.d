@@ -6,6 +6,7 @@
 LS_OPTIONS=''
 LS_OPTIONS+='-F '             # add / to directories
 LS_OPTIONS+='--color=auto '   # colorize
+LS_OPTIONS+='-h '             # human readable file sizes
 LS_OPTIONS+='-H '             # follow symlinks 
 
 if [[ -f ~/rc.d/dircolors ]]; then
