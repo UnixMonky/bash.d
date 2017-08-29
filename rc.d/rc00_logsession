@@ -6,7 +6,7 @@ if [ -z "$UNDER_SCRIPT" ]; then
   PROCID=$$
   DATESTAMP=$(date +"%F_%H%M%S")
   #LOGDIR=~/logs/term/$(date +"%Y/%m")
-  LOGDIR=~/logs/term/$(date +"%Y/%m")/raw
+  LOGDIR=~/logs/term/raw
   LOGFILE=${LOGDIR}/$(hostname)_${PROCID}_${DATESTAMP}.rlog
   [[ ! -d ${LOGDIR} ]] && mkdir ${LOGDIR}
   export UNDER_SCRIPT=1
