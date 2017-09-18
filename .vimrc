@@ -20,13 +20,10 @@ set backup          " enable backing up file on open
 set backupdir=/tmp      " path of backup file
 set directory=/tmp      " path of swap file
 
-" Set color theme
+" Set Solarized Theme
 syntax enable
-" - solarized
-"set background=dark
-"colorscheme solarized
-" - dracula
-colorscheme dracula
+set background=dark
+colorscheme solarized
 
 " set font
 if has('gui_running')
