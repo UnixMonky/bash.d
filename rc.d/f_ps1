@@ -27,7 +27,7 @@ bash_prompt_command () {
 
     # set git branch if in git repo
     local BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/{XxX:\1}/')
-    local REPO=$(git config --local remote.origin.url | awk -F/ '{print $NF}' | cut -d. -f1)
+    [[ -n ${BRANCH} ]] && local REPO=$(git config --local remote.origin.url | awk -F/ '{print $NF}' | cut -d. -f1)
     BRANCH=$(echo $BRANCH | sed "s/{XxX/ {${REPO}/")
       if [[ ${BRANCH} == *":master}"* ]]; then
         local GITCOLOR=${FG_YELLOW}
