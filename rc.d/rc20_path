@@ -27,6 +27,7 @@ LOCAL_PATHS+=("/opt/samba/bin")        # SAMBA
 LOCAL_PATHS+=("/opt/samba/sbin")       # SAMBA
 LOCAL_PATHS+=("/opt/mysql/bin")        # MySQL
 LOCAL_PATHS+=("/usr/local/pulse")      # Pulse Secure
+LOCAL_PATHS+=("/usr/local/go/bin")     # Go language
 
 LOCAL_PATHS+=($(echo -n $(echo $PATH | sed "s/:/\n/g" | grep cygdrive))) #cygwin
 
