@@ -33,3 +33,6 @@ if [[ -f $(/usr/bin/which vim) ]]; then
   fi
 fi
 
+# nice sorting alias
+alias ducks='du -cksh * | sort -hr | head -n 15'
+
