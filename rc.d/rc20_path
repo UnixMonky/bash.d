@@ -21,7 +21,6 @@ LOCAL_PATHS+=("/usr/local/sbin")       # local system binaries
 
 # User-based local directories
 LOCAL_PATHS+=("${HOME}/.local/bin")    # user local binaries
-LOCAL_PATHS+=("${HOME}/.npm-global/bin")    # user local npm binaries
 
 # Utilities
 LOCAL_PATHS+=("/opt/samba/bin")        # SAMBA
