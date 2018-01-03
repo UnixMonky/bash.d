@@ -15,6 +15,10 @@ else
 eval "$(dircolors)"
 fi
 
+# prompt options
+alias psf="export PS_LENGTH=PS_FULL"
+alias pss="export PS_LENGTH=PS_SHORT"
+
 # set grep coloring
 alias grep='grep --color=auto'
 

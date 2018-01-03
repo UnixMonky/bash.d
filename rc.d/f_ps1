@@ -1,6 +1,7 @@
 ###
 # Define the shell prompt
 ###
+export PS_LENGTH="${PS_LENGTH:-PS_FULL}"
 bash_prompt_command () {
     # exit must be first
     local EXIT=$?
@@ -46,12 +47,18 @@ bash_prompt_command () {
     fi
 
     # put it all together
-    PS1=" ${STATUS}"
-    PS1+=" ${TIME}"
-    PS1+=" ${FG_DEFAULT}(${USER}${FG_DEFAULT}@${HOST}${FG_DEFAULT})"
-    PS1+="${GITCOLOR}${BRANCH}${FG_DEFAULT}"
-    PS1+="${CHEFCOLOR}${CHEF}${FG_DEFAULT}"
-    PS1+=" ${MYPWD} > "
+    PS_FULL=" ${STATUS}"
+    PS_FULL+=" ${TIME}"
+    PS_FULL+=" ${FG_DEFAULT}(${USER}${FG_DEFAULT}@${HOST}${FG_DEFAULT})"
+    PS_FULL+="${GITCOLOR}${BRANCH}${FG_DEFAULT}"
+    PS_FULL+="${CHEFCOLOR}${CHEF}${FG_DEFAULT}"
+    PS_FULL+=" ${MYPWD} > "
+    export PS_FULL
+
+    PS_SHORT="${FG_DEFAULT}(${USER}${FG_DEFAULT}@${HOST}${FG_DEFAULT}) ${MYPWD} > "
+    export PS_SHORT
+
+    PS1="${!PS_LENGTH}"
     export PS1
 
     # update the titlebar
