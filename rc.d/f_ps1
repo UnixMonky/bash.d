@@ -25,6 +25,11 @@ bash_prompt_command () {
       else if (NF>3) print $1 "/" $2 "/.../" $NF;
       else print $1 "/.../" $NF; }
       else print $0;}'"'"')'
+    local MYSPWD='$(echo -n "${PWD/#$HOME/~}" | awk -F "/" '"'"'{
+      if (length($0) > 20) { if (NF>4) print $1 "/" $2 "/.../" $(NF);
+      else if (NF>3) print $1 "/" $2 "/.../" $NF;
+      else print $1 "/.../" $NF; }
+      else print $0;}'"'"')'
 
     # set git branch if in git repo
     local BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/{XxX:\1}/')
@@ -55,7 +60,7 @@ bash_prompt_command () {
     PS_FULL+=" ${MYPWD} > "
     export PS_FULL
 
-    PS_SHORT="${FG_DEFAULT}(${USER}${FG_DEFAULT}@${HOST}${FG_DEFAULT}) ${MYPWD} > "
+    PS_SHORT="${FG_DEFAULT}(${HOST}${FG_DEFAULT}) ${MYSPWD} > "
     export PS_SHORT
 
     PS1="${!PS_LENGTH}"
