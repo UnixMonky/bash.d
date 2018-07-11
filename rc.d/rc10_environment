@@ -31,7 +31,12 @@ chmod 700 .ssh 2> /dev/null
 ###
 # Verify we have a valid term, if not redefine it
 ###
-#if [[ ! -f /usr/share/terminfo/${TERM:0:1}/${TERM} ]]; then
-  # this term doesn't exit, try xterm or vt
-#  [[ -f /usr/share/terminfo/x/xterm-256color ]] && export TERM=xterm-256color || export TERM=vt220
-#fi
+if [[ ! -f /usr/share/terminfo/${TERM:0:1}/${TERM} ]]; then
+  # this term doesn't exist, see if there's a non-unicode version
+  if [[ -f /usr/share/terminfo/${TERM:0:1}/${TERM/-unicode} ]]; then
+    export TERM=${TERM/-unicode}
+  else 
+    # try xterm or vt
+    [[ -f /usr/share/terminfo/x/xterm-256color ]] && export TERM=xterm-256color || export TERM=vt220
+  fi
+fi
