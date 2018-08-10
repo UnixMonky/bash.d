@@ -26,6 +26,10 @@ alias ls='ls $LS_OPTIONS'
 alias ll="ls $LS_OPTIONS -l"
 alias la="ls $LS_OPTIONS -A"
 alias lla="ls $LS_OPTIONS -lA"
+alias lltr="ls $LS_OPTIONS -lAtr"
+
+# docker runs with sudo if it exists
+[[ -f $(/usr/bin/which docker) ]] && alias docker="sudo docker"
 
 # force vim if it exists
 if [[ -f $(/usr/bin/which vim) ]]; then
