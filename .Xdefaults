@@ -348,3 +348,16 @@ URxvt.color14: #93a1a1
 URxvt.color7: #eee8d5
 URxvt.color15: #fdf6e3
 
+! ####################
+! # urxvt-font-size  #
+! ####################
+!-------------------------------------------------------------------------------
+! https://github.com/majutsushi/urxvt-font-size
+!-------------------------------------------------------------------------------
+
+URxvt.keysym.C-KP_Add:     font-size:increase
+URxvt.keysym.C-KP_Subtract:   font-size:decrease
+! URxvt.keysym.C-S-Up:   font-size:incglobal
+! URxvt.keysym.C-S-Down: font-size:decglobal
+URxvt.keysym.C-KP_0:  font-size:reset
+! URxvt.keysym.C-slash:  font-size:show
