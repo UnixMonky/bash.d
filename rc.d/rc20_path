@@ -22,6 +22,7 @@ LOCAL_PATHS+=("/snap/bin")             # local snap binaries
 
 # User-based local directories
 LOCAL_PATHS+=("${HOME}/.local/bin")    # user local binaries
+LOCAL_PATHS+=("${HOME}/lbin")          # user local binaries
 
 # Utilities
 LOCAL_PATHS+=("/opt/samba/bin")        # SAMBA
