@@ -40,6 +40,9 @@ LOCAL_PATHS+=("${HOME}/scripts")       # my scripts
 LOCAL_PATHS+=("/usr/games")            # games
 LOCAL_PATHS+=("/usr/local/games")      # games
 
+# autocomplete
+LOCAL_PATHS+=("/usr/local/aws/bin/aws_completer")      # aws cli
+
 FULL_PATH=()
 for PATH_ELEMENT in "${OS_PATH[@]}" "${LOCAL_PATHS[@]}"; do
   if [ -d $PATH_ELEMENT ]; then FULL_PATH+=("$PATH_ELEMENT"); fi
