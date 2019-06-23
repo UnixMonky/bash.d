@@ -41,7 +41,7 @@ LOCAL_PATHS+=("/usr/games")            # games
 LOCAL_PATHS+=("/usr/local/games")      # games
 
 # autocomplete
-LOCAL_PATHS+=("/usr/local/aws/bin/aws_completer")      # aws cli
+LOCAL_PATHS+=("/usr/local/aws/bin")      # aws cli
 
 FULL_PATH=()
 for PATH_ELEMENT in "${OS_PATH[@]}" "${LOCAL_PATHS[@]}"; do
