@@ -8,3 +8,7 @@
 if [ -f ~/.bashrc ]; then
    source ~/.bashrc
 fi
+
+if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
+	exec startx
+fi
