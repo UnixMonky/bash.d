@@ -29,16 +29,16 @@ alias lla="ls $LS_OPTIONS -lA"
 alias lltr="ls $LS_OPTIONS -lAtr"
 
 # docker runs with sudo if it exists
-[[ -f $(/usr/bin/which docker &>/dev/null) ]] && alias dk="docker"
-[[ -f $(/usr/bin/which docker-compose &>/dev/null) ]] && alias dkc="docker-compose"
+[[ -f $(type -p docker ) ]] && alias dk="docker"
+[[ -f $(type -p docker-compose ) ]] && alias dkc="docker-compose"
 
 # force vim if it exists
-if [[ -f $(/usr/bin/which &>/dev/null vim) ]]; then
-  if [[ -f $(/usr/bin/which &>/dev/null gvim) ]]; then
-    alias vi="$(/usr/bin/which &>/dev/null gvim)"
-    alias vim="$(/usr/bin/which &>/dev/null gvim)"
+if [[ -f $(type -p  vim) ]]; then
+  if [[ -f $(type -p  gvim) ]]; then
+    alias vi="$(type -p  gvim)"
+    alias vim="$(type -p  gvim)"
   else
-    alias vi="$(/usr/bin/which &>/dev/nullvim)"
+    alias vi="$(type -p vim)"
   fi
 fi
 
