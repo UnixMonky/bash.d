@@ -3,7 +3,7 @@
 # +------------------------------------------------+
 
 ## AWS CLI
-AWS_COMPLETER=$(which aws_completer)
+AWS_COMPLETER=$(type -p aws_completer)
 [[ -f ${AWS_COMPLETER} ]] && complete -C ${AWS_COMPLETER} aws
 
 ## nvm
