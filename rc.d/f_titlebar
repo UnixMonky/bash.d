@@ -1,6 +1,6 @@
 function titlebar {
 
-  OS=$(grep PRETTY_NAME /etc/os-release | cut -d\" -f2)
+  OS=$(< /etc/system-release)
   HOST=$(hostname)
   TITLEBAR="${HOST} [${OS}]"
 

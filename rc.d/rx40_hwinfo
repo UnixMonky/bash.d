@@ -31,10 +31,8 @@ else
               CPU=$(lshw -c cpu 2> /dev/null | fgrep -c '*-cpu:')
               RAM=$(lshw -c memory 2> /dev/null | grep size | cut -d: -f2 | sed -e 's/^[[:space:]]*//')
       fi
-      if [[ -f /etc/os-release ]]; then
-              OSNAME=$(grep PRETTY_NAME /etc/os-release | cut -d\" -f2)
-      elif [[ -f /etc/redhat-release ]]; then
-              OSNAME="RHEL $(cat /etc/redhat-release | cut -d\  -f7-)"
+      if [[ -f /etc/system-release ]]; then
+              OSNAME=$(< /etc/os-release )
       else
               OSNAME="Linux (Unknown)"
       fi
