@@ -9,10 +9,18 @@ export HOSTNAME=$(uname -n | cut -d. -f1)  # hostname sans domain
 export PAGER='less -s'       # use less as default pager (i.e. for man)
 
 ###
-# Always use vi as our editor
+# use vi-style command line editing
 ###
 set -o vi
-export VISUAL=vi
+
+###
+# Always use vi as our editor
+###
+if [[ $(type -P vi) ]]; then
+  export VISUAL=vi
+elif [[ $(type -P vim ) ]]; then
+  export VISUAL=vim
+fi
 
 ###
 # Set unique history files
