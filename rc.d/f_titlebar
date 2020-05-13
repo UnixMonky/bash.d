@@ -1,7 +1,7 @@
 function titlebar {
 
 
-  OS=$(lsb_release -a | grep ^Release:)
+  OS=$(lsb_release -d| cut -f2-)
   HOST=$(hostname)
   TITLEBAR="${HOST} [${OS}]"
 
