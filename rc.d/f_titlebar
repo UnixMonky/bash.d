@@ -1,6 +1,7 @@
 function titlebar {
 
-  OS=$(< /etc/system-release)
+
+  OS=$(lsb_release -a | grep ^Release:)
   HOST=$(hostname)
   TITLEBAR="${HOST} [${OS}]"
 
