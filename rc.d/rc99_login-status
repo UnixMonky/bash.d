@@ -1,0 +1,9 @@
+###
+# Show data on login
+###
+
+if [[ -f $(type -p screen ) ]]; then
+  openScreens="$(screen -ls | grep "(")"
+  [[ -n ${openScreens} ]] && screen -ls
+fi
+
