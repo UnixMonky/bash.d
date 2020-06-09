@@ -43,6 +43,9 @@ LOCAL_PATHS+=("/usr/local/games")      # games
 # autocomplete
 LOCAL_PATHS+=("/usr/local/aws/bin")      # aws cli
 
+# ruby games
+LOCAL_PATHS+=("${HOME}/.gem/ruby/2.7.0/bin")      # ruby gems
+
 FULL_PATH=()
 for PATH_ELEMENT in "${OS_PATH[@]}" "${LOCAL_PATHS[@]}"; do
   if [ -d $PATH_ELEMENT ]; then FULL_PATH+=("$PATH_ELEMENT"); fi
