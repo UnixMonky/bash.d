@@ -52,4 +52,7 @@ fi
 ###
 # If Dracula gtk theme is installed, use it by default
 ###
-[[ -d ~/.themes/Dracula ]] && export GTK_THEME=Dracula
+if [[ -d ~/.themes/Dracula ]]; then
+   export GTK_THEME=Dracula                                # gtk3
+   export GTK2_RC_FILES=~/.themes/Dracula/gtk-2.0/gtkrc    # gtk2
+fi
