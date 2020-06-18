@@ -29,18 +29,20 @@ alias lla="ls $LS_OPTIONS -lA"
 alias lltr="ls $LS_OPTIONS -lAtr"
 
 # docker runs with sudo if it exists
-[[ -f $(type -p docker ) ]] && alias dk="docker"
-[[ -f $(type -p docker-compose ) ]] && alias dkc="docker-compose"
+# [[ -f $(type -p docker ) ]] && alias dk="docker"
+# [[ -f $(type -p docker-compose ) ]] && alias dkc="docker-compose"
 
 # force vim if it exists
-if [[ -f $(type -p  vim) ]]; then
-  if [[ -f $(type -p  gvim) ]]; then
-    alias vi="$(type -p  gvim)"
-    alias vim="$(type -p  gvim)"
-  else
-    alias vi="$(type -p vim)"
-  fi
+if [[ -f $(type -p  gvim) ]]; then
+  alias vi="$(type -p  gvim)"
+  alias vim="$(type -p  gvim)"
+elif [[ -f $(type -p  vim) ]]; then
+  alias vi="$(type -p vim)"
 fi
+
+## terraform alias
+[[ -f $(type -p  terraform) ]] && alias tf="terraform"
+
 
 # nice sorting alias
 alias ducks='du -cksh * | sort -hr | head -n 15'
